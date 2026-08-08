@@ -1,0 +1,20 @@
+# Data pipeline
+pandas
+numpy
+pyarrow          # Parquet support for pandas
+
+# Calibration modelling
+scikit-learn
+joblib
+
+# RenjuNet XML parsing
+lxml
+
+# Visualisation (board grid, calibration plots)
+matplotlib
+
+# Research environment
+jupyterlab
+
+# Testing
+pytest
