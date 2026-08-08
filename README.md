@@ -1,4 +1,4 @@
-# Gomoku Analysis Engine — Project Plan
+# Gomoku Analysis Engine — Project Plan :)
 
 A Gomoku equivalent of chess.com's post-game review, with live in-game move classification as well as a deeper post-game report. Built on top of Rapfi (open-source, NNUE-based Gomoku engine) rather than training a new engine from scratch.
 
