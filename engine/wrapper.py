@@ -150,7 +150,10 @@ class RapfiEngine:
 
 if __name__ == "__main__":
     # Quick manual smoke test, mirrors the terminal session you just ran.
-    engine = RapfiEngine("engine/rapfi_bin/pbrain-rapfi-macos-apple-silicon")
+    # Path is anchored to this script's own location, so it works regardless
+    # of which directory you run `python engine/wrapper.py` from.
+    _binary_path = Path(__file__).parent / "rapfi_bin" / "pbrain-rapfi-macos-apple-silicon"
+    engine = RapfiEngine(str(_binary_path))
     engine.start()
 
     resp = engine.begin()
