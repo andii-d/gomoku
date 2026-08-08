@@ -1,7 +1,8 @@
 """
-Self-play data generation. Runs full games with a single Rapfi engine
-instance playing both sides, logging per-move eval scores and the
-eventual outcome, for use in Phase 3 (calibration).
+Self-play data generation. Runs full games using two Rapfi engine
+processes, one per side, each only ever told the opponent's moves.
+Logs per-move eval scores and the eventual outcome, for use in
+Phase 3 (calibration).
 
 See PROJECT_PLAN.md Section 5.1 / 6.1.
 
@@ -51,7 +52,7 @@ class MoveRecord:
 class GameRecord:
     game_id: str
     board_size: int
-    time_budget_ms: int
+    time_budget_ms: dict[int, int]  # {1: ms, 2: ms} — independent per side
     moves: list[MoveRecord] = field(default_factory=list)
     winner: Optional[int] = None  # 1, 2, or None for draw
     total_moves: int = 0
@@ -91,15 +92,36 @@ class Board:
 
 
 def play_one_game(
-    engine_binary: str,
+    engine_binary: Optional[str] = None,
     board_size: int = BOARD_SIZE,
-    time_budget_ms: Optional[int] = None,
+    time_budget_ms: Optional[dict[int, int]] = None,
 ) -> GameRecord:
-    if time_budget_ms is None:
-        time_budget_ms = random.choice(list(STRENGTH_PROFILES.values()))
+    """
+    Uses two separate engine processes, one per side. Each engine is only
+    ever told the OTHER side's moves via turn(), never its own move
+    reflected back, which would contradict its internal board and hang
+    the process waiting on a response that never comes cleanly.
 
-    engine = RapfiEngine(engine_binary, board_size=board_size, timeout_turn_ms=time_budget_ms)
-    engine.start()
+    Each side gets an INDEPENDENT random time budget by default. Freestyle
+    Gomoku has a real first-player advantage; an evenly-matched mirror
+    match (same budget both sides) lets that advantage dominate and
+    player 1 wins nearly every game, starving the dataset of losing
+    positions for player 1 and winning ones for player 2. Randomising
+    strength independently per side gets real outcome variety instead.
+    """
+    if time_budget_ms is None:
+        time_budget_ms = {
+            1: random.choice(list(STRENGTH_PROFILES.values())),
+            2: random.choice(list(STRENGTH_PROFILES.values())),
+        }
+
+    binary = engine_binary or str(default_engine_binary())
+    engines = {
+        1: RapfiEngine(binary, board_size=board_size, timeout_turn_ms=time_budget_ms[1]),
+        2: RapfiEngine(binary, board_size=board_size, timeout_turn_ms=time_budget_ms[2]),
+    }
+    engines[1].start()
+    engines[2].start()
 
     board = Board(board_size)
     game = GameRecord(
@@ -108,30 +130,34 @@ def play_one_game(
         time_budget_ms=time_budget_ms,
     )
 
-    response = engine.begin()
+    response = engines[1].begin()
     mover = 1
     move_number = 1
 
-    while True:
-        x, y = response.move
-        board.place(x, y, mover)
-        game.moves.append(
-            MoveRecord(move_number, mover, x, y, response.eval_score, response.depth)
-        )
+    try:
+        while True:
+            x, y = response.move
+            board.place(x, y, mover)
+            game.moves.append(
+                MoveRecord(move_number, mover, x, y, response.eval_score, response.depth)
+            )
 
-        if board.check_win(x, y, mover):
-            game.winner = mover
-            break
-        if board.is_full():
-            game.winner = None  # draw
-            break
+            if board.check_win(x, y, mover):
+                game.winner = mover
+                break
+            if board.is_full():
+                game.winner = None  # draw
+                break
 
-        mover = 2 if mover == 1 else 1
-        move_number += 1
-        response = engine.turn(x, y)
+            next_mover = 2 if mover == 1 else 1
+            move_number += 1
+            response = engines[next_mover].turn(x, y)  # tell the OTHER engine what was just played
+            mover = next_mover
+    finally:
+        engines[1].close()
+        engines[2].close()
 
     game.total_moves = len(game.moves)
-    engine.close()
     return game
 
 
@@ -163,10 +189,16 @@ def save_game(game: GameRecord, output_dir: Path) -> Path:
     return path
 
 
-def run_batch(n_games: int, engine_binary: str, output_dir: Path) -> None:
+def run_batch(
+    n_games: int,
+    output_dir: Path,
+    engine_binary: Optional[str] = None,
+) -> None:
+    binary = engine_binary or str(default_engine_binary())
+    print(f"Engine binary: {binary}")
     for i in range(n_games):
         start = time.time()
-        game = play_one_game(engine_binary)
+        game = play_one_game(binary)
         path = save_game(game, output_dir)
         elapsed = time.time() - start
         print(
@@ -178,7 +210,5 @@ def run_batch(n_games: int, engine_binary: str, output_dir: Path) -> None:
 if __name__ == "__main__":
     # Start deliberately small. Confirm the pipeline end to end before
     # scaling up (Section 5.1: "start small, 20-50 games first").
-    ENGINE_BINARY = default_engine_binary()
     OUTPUT_DIR = Path(__file__).parent.parent / "data" / "raw"
-
-    run_batch(n_games=5, engine_binary=str(ENGINE_BINARY), output_dir=OUTPUT_DIR)
+    run_batch(n_games=5, output_dir=OUTPUT_DIR)

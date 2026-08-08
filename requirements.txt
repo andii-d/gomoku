@@ -18,3 +18,7 @@ jupyterlab
 
 # Testing
 pytest
+
+# Optional: richer CPU feature flags for picking the best Rapfi ISA build.
+# Detection still works without it (via /proc/cpuinfo, sysctl, or CPUID).
+py-cpuinfo

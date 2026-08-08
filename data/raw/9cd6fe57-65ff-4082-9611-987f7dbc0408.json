@@ -1,0 +1,270 @@
+{
+  "game_id": "9cd6fe57-65ff-4082-9611-987f7dbc0408",
+  "board_size": 15,
+  "time_budget_ms": 5000,
+  "winner": 1,
+  "total_moves": 29,
+  "moves": [
+    {
+      "move_number": 1,
+      "mover": 1,
+      "x": 7,
+      "y": 7,
+      "eval_score": null,
+      "depth": null,
+      "won": true
+    },
+    {
+      "move_number": 2,
+      "mover": 2,
+      "x": 7,
+      "y": 6,
+      "eval_score": -522,
+      "depth": 22,
+      "won": false
+    },
+    {
+      "move_number": 3,
+      "mover": 1,
+      "x": 6,
+      "y": 5,
+      "eval_score": 494,
+      "depth": 23,
+      "won": true
+    },
+    {
+      "move_number": 4,
+      "mover": 2,
+      "x": 6,
+      "y": 6,
+      "eval_score": -538,
+      "depth": 21,
+      "won": false
+    },
+    {
+      "move_number": 5,
+      "mover": 1,
+      "x": 5,
+      "y": 6,
+      "eval_score": 591,
+      "depth": 22,
+      "won": true
+    },
+    {
+      "move_number": 6,
+      "mover": 2,
+      "x": 5,
+      "y": 8,
+      "eval_score": -736,
+      "depth": 20,
+      "won": false
+    },
+    {
+      "move_number": 7,
+      "mover": 1,
+      "x": 7,
+      "y": 4,
+      "eval_score": 767,
+      "depth": 28,
+      "won": true
+    },
+    {
+      "move_number": 8,
+      "mover": 2,
+      "x": 8,
+      "y": 3,
+      "eval_score": -758,
+      "depth": 29,
+      "won": false
+    },
+    {
+      "move_number": 9,
+      "mover": 1,
+      "x": 6,
+      "y": 7,
+      "eval_score": 649,
+      "depth": 26,
+      "won": true
+    },
+    {
+      "move_number": 10,
+      "mover": 2,
+      "x": 5,
+      "y": 7,
+      "eval_score": -1304,
+      "depth": 26,
+      "won": false
+    },
+    {
+      "move_number": 11,
+      "mover": 1,
+      "x": 4,
+      "y": 5,
+      "eval_score": null,
+      "depth": 26,
+      "won": true
+    },
+    {
+      "move_number": 12,
+      "mover": 2,
+      "x": 3,
+      "y": 4,
+      "eval_score": -866,
+      "depth": 34,
+      "won": false
+    },
+    {
+      "move_number": 13,
+      "mover": 1,
+      "x": 7,
+      "y": 5,
+      "eval_score": null,
+      "depth": 26,
+      "won": true
+    },
+    {
+      "move_number": 14,
+      "mover": 2,
+      "x": 8,
+      "y": 5,
+      "eval_score": null,
+      "depth": 26,
+      "won": false
+    },
+    {
+      "move_number": 15,
+      "mover": 1,
+      "x": 6,
+      "y": 4,
+      "eval_score": null,
+      "depth": 26,
+      "won": true
+    },
+    {
+      "move_number": 16,
+      "mover": 2,
+      "x": 4,
+      "y": 4,
+      "eval_score": -690,
+      "depth": 26,
+      "won": false
+    },
+    {
+      "move_number": 17,
+      "mover": 1,
+      "x": 8,
+      "y": 6,
+      "eval_score": null,
+      "depth": 26,
+      "won": true
+    },
+    {
+      "move_number": 18,
+      "mover": 2,
+      "x": 9,
+      "y": 7,
+      "eval_score": null,
+      "depth": 26,
+      "won": false
+    },
+    {
+      "move_number": 19,
+      "mover": 1,
+      "x": 5,
+      "y": 3,
+      "eval_score": null,
+      "depth": 26,
+      "won": true
+    },
+    {
+      "move_number": 20,
+      "mover": 2,
+      "x": 4,
+      "y": 2,
+      "eval_score": null,
+      "depth": 26,
+      "won": false
+    },
+    {
+      "move_number": 21,
+      "mover": 1,
+      "x": 5,
+      "y": 5,
+      "eval_score": null,
+      "depth": 26,
+      "won": true
+    },
+    {
+      "move_number": 22,
+      "mover": 2,
+      "x": 3,
+      "y": 5,
+      "eval_score": null,
+      "depth": 26,
+      "won": false
+    },
+    {
+      "move_number": 23,
+      "mover": 1,
+      "x": 7,
+      "y": 2,
+      "eval_score": null,
+      "depth": 26,
+      "won": true
+    },
+    {
+      "move_number": 24,
+      "mover": 2,
+      "x": 4,
+      "y": 6,
+      "eval_score": null,
+      "depth": 26,
+      "won": false
+    },
+    {
+      "move_number": 25,
+      "mover": 1,
+      "x": 5,
+      "y": 4,
+      "eval_score": null,
+      "depth": 26,
+      "won": true
+    },
+    {
+      "move_number": 26,
+      "mover": 2,
+      "x": 5,
+      "y": 2,
+      "eval_score": null,
+      "depth": 26,
+      "won": false
+    },
+    {
+      "move_number": 27,
+      "mover": 1,
+      "x": 6,
+      "y": 3,
+      "eval_score": null,
+      "depth": 26,
+      "won": true
+    },
+    {
+      "move_number": 28,
+      "mover": 2,
+      "x": 8,
+      "y": 1,
+      "eval_score": null,
+      "depth": 26,
+      "won": false
+    },
+    {
+      "move_number": 29,
+      "mover": 1,
+      "x": 3,
+      "y": 6,
+      "eval_score": null,
+      "depth": null,
+      "won": true
+    }
+  ]
+}
