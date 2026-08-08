@@ -6,6 +6,7 @@ Research-phase only: one game analysed at a time, no async, no process pool.
 See PROJECT_PLAN.md Section 6.1.
 """
 
+import platform
 import re
 import subprocess
 from dataclasses import dataclass, field
@@ -16,6 +17,24 @@ from typing import Optional
 MOVE_RE = re.compile(r"^(\d+),(\d+)$")
 EVAL_RE = re.compile(r"Eval (-?\d+)")
 DEPTH_RE = re.compile(r"Depth (\d+)-(\d+)")
+
+
+def default_engine_binary() -> Path:
+    """
+    Pick the bundled Rapfi binary matching the host OS. Defaults to the
+    plain AVX2 build on Windows/Linux, which runs on effectively any
+    x86-64 CPU from the last decade; there's only one macOS build (Apple
+    Silicon).
+    """
+    bin_dir = Path(__file__).parent / "rapfi_bin"
+    system = platform.system()
+    if system == "Windows":
+        return bin_dir / "pbrain-rapfi-windows-avx2.exe"
+    if system == "Darwin":
+        return bin_dir / "pbrain-rapfi-macos-apple-silicon"
+    if system == "Linux":
+        return bin_dir / "pbrain-rapfi-linux-clang-avx2"
+    raise RuntimeError(f"No Rapfi engine binary bundled for platform: {system}")
 
 
 @dataclass
@@ -29,7 +48,7 @@ class EngineResponse:
 class RapfiEngine:
     """
     Usage:
-        engine = RapfiEngine("engine/rapfi_bin/pbrain-rapfi-macos-apple-silicon")
+        engine = RapfiEngine(str(default_engine_binary()))
         engine.start()
         response = engine.begin()          # engine plays first move
         response = engine.turn(6, 6)       # tell engine opponent played (6,6)
@@ -152,8 +171,7 @@ if __name__ == "__main__":
     # Quick manual smoke test, mirrors the terminal session you just ran.
     # Path is anchored to this script's own location, so it works regardless
     # of which directory you run `python engine/wrapper.py` from.
-    _binary_path = Path(__file__).parent / "rapfi_bin" / "pbrain-rapfi-macos-apple-silicon"
-    engine = RapfiEngine(str(_binary_path))
+    engine = RapfiEngine(str(default_engine_binary()))
     engine.start()
 
     resp = engine.begin()

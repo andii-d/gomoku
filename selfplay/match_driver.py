@@ -20,7 +20,7 @@ from typing import Optional
 
 # Make `engine` importable regardless of how this script is invoked.
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from engine.wrapper import RapfiEngine  # noqa: E402
+from engine.wrapper import RapfiEngine, default_engine_binary  # noqa: E402
 
 
 BOARD_SIZE = 15
@@ -178,12 +178,7 @@ def run_batch(n_games: int, engine_binary: str, output_dir: Path) -> None:
 if __name__ == "__main__":
     # Start deliberately small. Confirm the pipeline end to end before
     # scaling up (Section 5.1: "start small, 20-50 games first").
-    ENGINE_BINARY = (
-        Path(__file__).parent.parent
-        / "engine"
-        / "rapfi_bin"
-        / "pbrain-rapfi-macos-apple-silicon"
-    )
+    ENGINE_BINARY = default_engine_binary()
     OUTPUT_DIR = Path(__file__).parent.parent / "data" / "raw"
 
     run_batch(n_games=5, engine_binary=str(ENGINE_BINARY), output_dir=OUTPUT_DIR)
