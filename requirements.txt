@@ -1,7 +1,6 @@
 # Data pipeline
 pandas
 numpy
-pyarrow          # Parquet support for pandas
 
 # Calibration modelling
 scikit-learn
